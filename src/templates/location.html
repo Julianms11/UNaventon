@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Ubicación</h1>
+<button type="submit" onclick="testeo();">Obtener ubicación</button>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+<script>
+
+    function testeo(){
+        if ( navigator.geolocation ) {
+        navigator.geolocation.getCurrentPosition(position)
+        }
+
+    }
+        
+    function position(geoLocationPosition){
+
+        let coords = geoLocationPosition.coords;
+
+        const lat = coords.latitude;
+        const lon = coords.longitude;
+
+        const coordenadas = {lat, lon}
+        const s = JSON.stringify(coordenadas);
+        console.log(s);
+        $.ajax({
+            url:"/get_user_coords",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)
+        });
+    }
+
+
+</script>
+
+{% endblock %}
