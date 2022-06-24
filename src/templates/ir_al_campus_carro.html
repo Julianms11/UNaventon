@@ -27,7 +27,7 @@
         const s = JSON.stringify(coordenadas);
         console.log(s);
         $.ajax({
-            url:"/get_user_coords",
+            url:"/ir_al_campus_carro",
             type:"POST",
             contentType: "application/json",
             data: JSON.stringify(s)
@@ -37,53 +37,57 @@
 
 </script>
 
-<h3>Ingresa tus datos de contacto.</h3>
-<div class="form-floating mb-3">
-    <input type="email" class="form-control" id="floatingInput" >
-    <label for="floatingInput">Nombre</label>
-  </div>
-  <div class="form-floating">
-    <input type="password" class="form-control" id="floatingPassword" >
-    <label for="floatingPassword"># Celular</label>
-  </div>
-<h3>Ingresa la placa de tu vehículo.</h3>
-<div class="form-floating mb-3">
-    <input type="email" class="form-control" id="floatingInput" >
-    <label for="floatingInput">Placa</label>
-  </div>
-<h3>Ingresa la tarifa que deseas cobrar.</h3>
+<form action="/ir_al_campus_carro" method="POST">
+  <h3>Ingresa tus datos de contacto.</h3>
   <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="floatingInput" >
-      <label for="floatingInput">Tarifa en pesos</label>
-  </div>
-<h3>Ingresa tu hora de salida.</h3>
-<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-    <option selected>Selecciona una hora</option>
-    <option value="24">00:00 AM</option>
-    <option value="1">1:00 AM</option>
-    <option value="2">2:00 AM</option>
-    <option value="3">3:00 AM</option>
-    <option value="4">4:00 AM</option>
-    <option value="5">5:00 AM</option>
-    <option value="6">6:00 AM</option>
-    <option value="7">7:00 AM</option>
-    <option value="8">8:00 AM</option>
-    <option value="9">9:00 AM</option>
-    <option value="10">10:00 AM</option>
-    <option value="11">11:00 AM</option>
-    <option value="12">12:00 PM</option>
-    <option value="13">1:00 PM</option>
-    <option value="14">2:00 PM</option>
-    <option value="15">3:00 PM</option>
-    <option value="16">4:00 PM</option>
-    <option value="17">5:00 PM</option>
-    <option value="18">6:00 PM</option>
-    <option value="19">7:00 PM</option>
-    <option value="20">8:00 PM</option>
-    <option value="21">9:00 PM</option>
-    <option value="22">10:00 PM</option>
-    <option value="23">11:00 PM</option>
+      <input  name="nombre" class="form-control" id="floatingInput" >
+      <label for="floatingInput">Nombre</label>
+    </div>
+    <div class="form-floating">
+      <input  name="celular" class="form-control" id="floatingPassword" >
+      <label for="floatingPassword"># Celular</label>
+    </div>
+  <h3>Ingresa la placa de tu vehículo.</h3>
+  <div class="form-floating mb-3">
+      <input  name="placa" class="form-control" id="floatingInput" >
+      <label for="floatingInput">Placa</label>
+    </div>
+  <h3>Ingresa la tarifa que deseas cobrar.</h3>
+    <div class="form-floating mb-3">
+        <input  name="tarifa" class="form-control" id="floatingInput" >
+        <label for="floatingInput">Tarifa en pesos</label>
+    </div>
+  <h3>Ingresa tu hora de salida.</h3>
+  <select class="form-select form-select-lg mb-3" name="horario" aria-label=".form-select-lg example">
+      <option selected>Selecciona una hora</option>
+      <option value="00:00 AM">00:00 AM</option>
+      <option value="1:00 AM">1:00 AM</option>
+      <option value="2:00 AM">2:00 AM</option>
+      <option value="3:00 AM">3:00 AM</option>
+      <option value="4:00 AM">4:00 AM</option>
+      <option value="5:00 AM">5:00 AM</option>
+      <option value="6:00 AM">6:00 AM</option>
+      <option value="7:00 AM">7:00 AM</option>
+      <option value="8:00 AM">8:00 AM</option>
+      <option value="9:00 AM">9:00 AM</option>
+      <option value="10:00 AM">10:00 AM</option>
+      <option value="11:00 AM">11:00 AM</option>
+      <option value="12:00 PM">12:00 PM</option>
+      <option value="1:00 PM">1:00 PM</option>
+      <option value="2:00 PM">2:00 PM</option>
+      <option value="3:00 PM">3:00 PM</option>
+      <option value="4:00 PM">4:00 PM</option>
+      <option value="5:00 PM">5:00 PM</option>
+      <option value="6:00 PM">6:00 PM</option>
+      <option value="7:00 PM">7:00 PM</option>
+      <option value="8:00 PM">8:00 PM</option>
+      <option value="9:00 PM">9:00 PM</option>
+      <option value="10:00 PM">10:00 PM</option>
+      <option value="11:00 PM">11:00 PM</option>
 
 
-  </select>
+    </select>
+    <button type="submit" class="btn btn-primary btn-lg">Registrar ruta</button>  
+  </form>  
+
 {% endblock %}

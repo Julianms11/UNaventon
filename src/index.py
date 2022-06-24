@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, request
 from flask_mysqldb import MySQL
+from flask_login import LoginManager, login_user, logout_user, login_required
 import json
 from envio_mail import SendEMail, codigo_generado
 from geopy.distance import geodesic
@@ -52,10 +53,17 @@ def login():
     if request.method == 'POST':
         correo_inst = request.form['email']
         contraseña = request.form['password']
-        #if (el correo y la contraseña existen y coinciden con la base de datos): 
-        # return redirect('/')
-        #else:
-        #   render_template('auth/login.html')
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM datos_usuario')
+        data = cur.fetchall()
+        for i in range(0,len(data)):
+            if correo_inst==data[i][0]:
+                if contraseña==data[i][1]:
+                    return redirect('/')
+                else:
+                    return render_template('auth/login.html')
+            else:
+                return redirect('/register')
     else:
         return render_template('auth/login.html')
 
@@ -84,29 +92,45 @@ def verifica_codigo():
 def intento():
     output = request.get_json()
     result = json.loads(output)
-    print(result)
-    
-    return result
+    lat = str(result["lat"])
+    lon = str(result["lon"])
+    cur = mysql.connection.cursor()
+    cur.execute('INSERT INTO ircampuscarro (lat, lon) VALUES (%s, %s)' , (lat, lon))
+    mysql.connection.commit()
 
-@app.route('/ir_al_campus')
+
+@app.route('/ir_al_campus', methods=['POST'])
 def ir_al_campus():
     return render_template('ir_al_campus.html')
 
-@app.route('/salir_del_campus')
+@app.route('/salir_del_campus', methods=['POST'])
 def salir_del_campus():
     return render_template('salir_del_campus.html')
 
-@app.route('/ir_al_campus_carro')
+@app.route('/ir_al_campus_carro', methods=['GET', 'POST'])
 def ir_al_campus_carro():
+    if request.method == 'POST':
+        output = request.get_json()
+        result = json.loads(output)
+        lat = str(result["lat"])
+        lon = str(result["lon"])
+        nombre_usuario = request.form['nombre']
+        celular_usuario = request.form['celular']
+        placa_usuario = request.form['placa']
+        tarifa_usuario = request.form['tarifa']
+        horario_usuario = request.form['horario']
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO ircampuscarro (lat, lon, Nombre, celular, placa, tarifa, horario) VALUES (%s, %s, %s, %s, %s, %s, %s)' , (lat, lon, nombre_usuario, celular_usuario, placa_usuario, tarifa_usuario, horario_usuario))
+        mysql.connection.commit()
+    else:
+        return render_template('ir_al_campus_carro.html')
+
+
     return render_template('ir_al_campus_carro.html')
 
-@app.route('/salir_del_campus_carro')
+@app.route('/salir_del_campus_carro', methods=['POST'])
 def salir_del_campus_carro():
     return render_template('salir_del_campus_carro.html')
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
