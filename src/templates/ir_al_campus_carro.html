@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1>Obtener ubicación de salida</h1>
+
+<h3>Obtener ubicación de salida</h3>
 
 <button type="submit" onclick="testeo();">Obtener ubicación</button>
 
@@ -27,7 +28,7 @@
         const s = JSON.stringify(coordenadas);
         console.log(s);
         $.ajax({
-            url:"/ir_al_campus_carro",
+            url:"/get_user_coords",
             type:"POST",
             contentType: "application/json",
             data: JSON.stringify(s)
@@ -40,25 +41,25 @@
 <form action="/ir_al_campus_carro" method="POST">
   <h3>Ingresa tus datos de contacto.</h3>
   <div class="form-floating mb-3">
-      <input  name="nombre" class="form-control" id="floatingInput" >
+      <input  name="nombre" class="form-control" id="floatingInput" required="">
       <label for="floatingInput">Nombre</label>
     </div>
     <div class="form-floating">
-      <input  name="celular" class="form-control" id="floatingPassword" >
+      <input  name="celular" class="form-control" id="floatingPassword" required="">
       <label for="floatingPassword"># Celular</label>
     </div>
   <h3>Ingresa la placa de tu vehículo.</h3>
   <div class="form-floating mb-3">
-      <input  name="placa" class="form-control" id="floatingInput" >
+      <input  name="placa" class="form-control" id="floatingInput" required="">
       <label for="floatingInput">Placa</label>
     </div>
   <h3>Ingresa la tarifa que deseas cobrar.</h3>
     <div class="form-floating mb-3">
-        <input  name="tarifa" class="form-control" id="floatingInput" >
+        <input  name="tarifa" class="form-control" id="floatingInput" required="">
         <label for="floatingInput">Tarifa en pesos</label>
     </div>
   <h3>Ingresa tu hora de salida.</h3>
-  <select class="form-select form-select-lg mb-3" name="horario" aria-label=".form-select-lg example">
+  <select required="" class="form-select form-select-lg mb-3" name="horario" aria-label=".form-select-lg example" >
       <option selected>Selecciona una hora</option>
       <option value="00:00 AM">00:00 AM</option>
       <option value="1:00 AM">1:00 AM</option>

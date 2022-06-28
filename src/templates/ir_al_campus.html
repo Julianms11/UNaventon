@@ -1,5 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1>Dirigirse al campues (no tiene carro)</h1>
+<h2>Rutas disponibles:</h2>
+{% for i in range(0, registros|length) %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">{{registros[i][1]}}</h5>
+      <p class="card-text">
+        Celular de contacto: {{registros[i][2]}}<br>
+        Placa del vehiculo: {{registros[i][3]}}<br>
+        Tarifa: {{registros[i][4]}}<br>
+        Horario de salida: {{registros[i][5]}}<br>
+        Distancia: {{distancia[i]}} metros
+      </p>
+      <a type="button" href="https://www.google.com/maps/@{{registros[i][0]}}" class="btn btn-primary">Ver punto de salida &raquo;</a>
+    </div>
+  </div>
+  <br>
+{% endfor %}
+
+<br>
+<h4>{{registros}}</h4>
+
+
 {% endblock %}

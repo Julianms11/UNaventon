@@ -1,11 +1,11 @@
+from unittest import result
 from geopy.distance import geodesic
 
 
-sds = geodesic((4.667982,-74.103693),(5.465616,-74.653929))
+def calcular_distancia(cords_set_1, cords_set_2):
+    distancia = (str(geodesic(cords_set_1, cords_set_2))).split(' ')
+    result = (float(distancia[0]))*1000
+    result = float("{:.3f}".format(result))
+    return result
 
-sds = str(sds)
-sds = sds.split(' ')
-distancia = float(sds[0])
-di = distancia * 1.60934
-
-print(di)
+print(calcular_distancia((4.6764531,-74.0652501),(4.6764511,-74.0652501)))

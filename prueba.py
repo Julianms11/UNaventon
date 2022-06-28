@@ -1,5 +1,6 @@
-x = {"lat":4.6370877,"lon":-74.0887461}
-lat = str(result["lat"])
-lon = str(result["lon"])
-cords = (lat +','+ lon)
-print(cords)
+lol = '4.33,3.434'
+lol = lol.split(',')
+lat = float(lol[0])
+lon = float(lol[1])
+lol = [lat, lon]
+print(lol)
