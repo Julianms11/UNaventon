@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-06-2022 a las 22:15:58
+-- Tiempo de generación: 28-06-2022 a las 11:59:52
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -39,13 +39,27 @@ CREATE TABLE `datos_usuario` (
 --
 
 CREATE TABLE `ircampuscarro` (
-  `lat` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lon` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cords` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Nombre` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `celular` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `placa` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tarifa` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
   `horario` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `salircampuscarro`
+--
+
+CREATE TABLE `salircampuscarro` (
+  `cords` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Nombre` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `celular` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `placa` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tarifa` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `horario` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -62,6 +76,13 @@ ALTER TABLE `datos_usuario`
 -- Indices de la tabla `ircampuscarro`
 --
 ALTER TABLE `ircampuscarro`
+  ADD UNIQUE KEY `celular` (`celular`),
+  ADD UNIQUE KEY `placa` (`placa`);
+
+--
+-- Indices de la tabla `salircampuscarro`
+--
+ALTER TABLE `salircampuscarro`
   ADD UNIQUE KEY `celular` (`celular`),
   ADD UNIQUE KEY `placa` (`placa`);
 COMMIT;
