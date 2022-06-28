@@ -1,3 +1,4 @@
+from tabnanny import check
 from flask import Flask, redirect, render_template, request
 from flask_mysqldb import MySQL
 from flask_login import LoginManager, login_user, logout_user, login_required
@@ -12,6 +13,7 @@ contrasena = ''
 
 cords = ''
 coords_from_maps_carro = ''
+coords_from_maps = ''
 
 donda = '1'
 
@@ -93,6 +95,17 @@ def test():
     print(coords_from_maps_carro)
     return ''
 
+@app.route('/maps_destino', methods=["POST"])
+def maps_destino():
+    output = request.get_json()
+    result = json.loads(output)
+    x = str(result['lat'])
+    y = str(result['lon'])
+    global coords_from_maps
+    coords_from_maps = {x, y}
+    print(coords_from_maps)
+    return ''
+
 
 @app.route('/destino_conductores', methods=['GET','POST'])
 
@@ -123,6 +136,7 @@ def intento():
     lon = str(result["lon"])
     global cords
     cords = {lat, lon}
+    return ''
 
 @app.route('/get_user_req_coords', methods=['POST'])
 
@@ -133,11 +147,16 @@ def intento_req():
     lat_req = result["lat"]
     global lon_req
     lon_req = result["lon"]
-    return ""
+    
+    return ''
 
 @app.route('/ubicacion_para_ir_al_campus')
 def ubicacion_para_campus():
     return render_template('ir_al_campus_copy.html')
+
+@app.route('/ubicacion_para_salir_del_campus')
+def ubicacion_para_salir_campus():
+    return render_template('salir_del_campus_copy.html')
 
 
 
@@ -146,7 +165,8 @@ def ir_al_campus():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM ircampuscarro')
     data = cur.fetchall()
-    user_current_position = [float(lat_req), float(lon_req)]
+    user_current_position = {float(lat_req), float(lon_req)}
+    print(user_current_position)
     rutas_cercanas = []
     distancia = []
     for i in range(0, len(data)):
@@ -165,7 +185,14 @@ def salir_del_campus():
     cur.execute('SELECT * FROM salircampuscarro')
     data = cur.fetchall()
     print(data)
-    return render_template('salir_del_campus.html', registros=data)
+    rutas_cercanas = []
+    for i in range(0, len(data)):
+        x = data[i][0]
+        x = x.split(',')
+        check_coords = (float(x[0]), float(x[1]))
+        if calcular_distancia(coords_from_maps, check_coords) <= 1500:
+            rutas_cercanas.append(data[i])
+    return render_template('salir_del_campus.html', registros=rutas_cercanas)
 
 @app.route('/ir_al_campus_carro', methods=['GET', 'POST'])
 def ir_al_campus_carro():

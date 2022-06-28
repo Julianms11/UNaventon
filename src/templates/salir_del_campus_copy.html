@@ -49,7 +49,7 @@
       </div>
   </nav>
     <h3>Selecciona en el mapa el lugar de destino.</h3>
-    <a type="button" class="btn btn-primary btn-sm" href="/salir_del_campus_carro" onclick="mandar_a_python()" >Registrar punto de destino</a>
+    <a type="button" class="btn btn-primary btn-sm" href="/salir_del_campus" onclick="mandar_a_python()" >Consultar rutas</a>
     <br>
     <div id="map"></div>
 
@@ -118,7 +118,7 @@ function setMapa (coords)
 function mandar_a_python(){
     const s = JSON.stringify(prueba);
         $.ajax({
-            url:"/maps_destino_conductores",
+            url:"/maps_destino",
             type:"POST",
             contentType: "application/json",
             data: JSON.stringify(s)});
