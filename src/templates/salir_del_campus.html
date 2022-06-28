@@ -2,4 +2,25 @@
 
 {% block content %}
 <h1>Salir del campus (no tiene carro)</h1>
+<h2>Rutas disponibles:</h2>
+<div class="row">
+{% for i in range(0, registros|length) %}
+<div class="col-md-4">   
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+        <h5 class="card-title">{{registros[i][1]}}</h5>
+        <p class="card-text">
+            Celular de contacto: {{registros[i][2]}}<br>
+            Placa del vehiculo: {{registros[i][3]}}<br>
+            Tarifa: {{registros[i][4]}}<br>
+            Horario de salida: {{registros[i][5]}}<br>
+            
+            
+        </p>
+        
+        </div>
+    </div>
+</div>
+<br>
+{% endfor %}
 {% endblock %}

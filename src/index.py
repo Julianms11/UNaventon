@@ -11,7 +11,9 @@ correo_inst = ''
 contrasena = ''
 
 cords = ''
+coords_from_maps_carro = ''
 
+donda = '1'
 
 lat_req = ''
 lon_req = ''
@@ -28,7 +30,7 @@ def es_miembro_unal(correo):
 def calcular_distancia(cords_set_1, cords_set_2):
     distancia = (str(geodesic(cords_set_1, cords_set_2))).split(' ')
     result = (float(distancia[0]))*1000
-    result = float("{:.3f}".format(result))
+    result = float("{:.2f}".format(result))
     return result
 
 
@@ -80,10 +82,22 @@ def login():
         return render_template('auth/login.html')
 
 
-@app.route('/location')
+@app.route('/maps_destino_conductores', methods=['POST'])
+def test():
+    output = request.get_json()
+    result = json.loads(output)
+    x = str(result['lat'])
+    y = str(result['lon'])
+    global coords_from_maps_carro
+    coords_from_maps_carro = {x, y}
+    print(coords_from_maps_carro)
+    return ''
+
+
+@app.route('/destino_conductores', methods=['GET','POST'])
 
 def location():
-        return render_template('location.html')
+    return render_template('destino_conductores.html')
 
 
 @app.route('/vef_code', methods=['POST'])
@@ -142,16 +156,16 @@ def ir_al_campus():
         if calcular_distancia(user_current_position, check_cords) <= 1500:
             rutas_cercanas.append(data[i])
             distancia.append(calcular_distancia(user_current_position, check_cords))
-
-
-        
-
-    
     return render_template('ir_al_campus.html', registros=rutas_cercanas, distancia=distancia)
+
 
 @app.route('/salir_del_campus')
 def salir_del_campus():
-    return render_template('salir_del_campus.html')
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM salircampuscarro')
+    data = cur.fetchall()
+    print(data)
+    return render_template('salir_del_campus.html', registros=data)
 
 @app.route('/ir_al_campus_carro', methods=['GET', 'POST'])
 def ir_al_campus_carro():
@@ -166,13 +180,35 @@ def ir_al_campus_carro():
         mysql.connection.commit()
     else:
         return render_template('ir_al_campus_carro.html')
-
-
     return render_template('ir_al_campus_carro.html')
 
-@app.route('/salir_del_campus_carro', methods=['POST'])
+@app.route('/salir_del_campus_carro', methods=['GET','POST'])
+
 def salir_del_campus_carro():
+    if request.method == 'POST':
+        nombre_usuario = request.form['nombre']
+        celular_usuario = request.form['celular']
+        placa_usuario = request.form['placa']
+        tarifa_usuario = request.form['tarifa']
+        horario_usuario = request.form['horario']
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO salircampuscarro (cords, Nombre, celular, placa, tarifa, horario) VALUES (%s, %s, %s, %s, %s, %s)' , (coords_from_maps_carro, nombre_usuario, celular_usuario, placa_usuario, tarifa_usuario, horario_usuario))
+        mysql.connection.commit()
+    else:
+        return render_template('salir_del_campus_carro.html')
     return render_template('salir_del_campus_carro.html')
+
+@app.route('/prueba', methods=['POST'])
+def prueba():
+    output = request.get_json()
+    result = json.loads(output)
+    cur = mysql.connection.cursor()
+    cur.execute('INSERT INTO prueba (coordenadas) VALUES (%s)' , (result))
+    mysql.connection.commit()
+    
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

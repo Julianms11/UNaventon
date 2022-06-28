@@ -2,25 +2,26 @@
 
 {% block content %}
 <h2>Rutas disponibles:</h2>
+<div class="row">
 {% for i in range(0, registros|length) %}
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">{{registros[i][1]}}</h5>
-      <p class="card-text">
-        Celular de contacto: {{registros[i][2]}}<br>
-        Placa del vehiculo: {{registros[i][3]}}<br>
-        Tarifa: {{registros[i][4]}}<br>
-        Horario de salida: {{registros[i][5]}}<br>
-        Distancia: {{distancia[i]}} metros
-      </p>
-      <a type="button" href="https://www.google.com/maps/@{{registros[i][0]}}" class="btn btn-primary">Ver punto de salida &raquo;</a>
+<div class="col-md-4">   
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+        <h5 class="card-title">{{registros[i][1]}}</h5>
+        <p class="card-text">
+            Celular de contacto: {{registros[i][2]}}<br>
+            Placa del vehiculo: {{registros[i][3]}}<br>
+            Tarifa: {{registros[i][4]}}<br>
+            Horario de salida: {{registros[i][5]}}<br>
+            Distancia: {{distancia[i]}} metros
+            <div class="mapouter"><div class="gmap_canvas"><iframe width="260" height="270" id="gmap_canvas" src="https://maps.google.com/maps?q={{registros[i][0]}}&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://123movies-to.org"></a><br><style>.mapouter{position:relative;text-align:right;height:270px;width:260px;}</style><a href="https://www.embedgooglemap.net">embedgooglemap.net</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:270px;width:260px;}</style></div></div>
+        </p>
+        
+        </div>
     </div>
-  </div>
-  <br>
-{% endfor %}
-
+</div>
 <br>
-<h4>{{registros}}</h4>
+{% endfor %}
 
 
 {% endblock %}

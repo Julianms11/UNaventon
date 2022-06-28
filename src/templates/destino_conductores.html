@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>UN Aventón </title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100%;
+        height: 80%;
+      }
+      #coords{width: 500px;}
+    </style>
+  </head>
+  <body >
+    <h3>Selecciona en el mapa el lugar de destino.</h3>
+    <div id="map"></div>
+
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script>
+
+
+var marker;          //variable del marcador
+var coords = {};    //coordenadas obtenidas con la geolocalización
+let prueba = {};
+//Funcion principal
+initMap = function () 
+{
+
+    //usamos la API para geolocalizar el usuario
+        navigator.geolocation.getCurrentPosition(
+          function (position){
+            coords =  {
+              lng: position.coords.longitude,
+              lat: position.coords.latitude
+            };
+            setMapa(coords);  //pasamos las coordenadas al metodo para crear el mapa
+            
+           
+          },function(error){console.log(error);});
+    
+}
+
+
+
+function setMapa (coords)
+{   
+      //Se crea una nueva instancia del objeto mapa
+      var map = new google.maps.Map(document.getElementById('map'),
+      {
+        zoom: 13,
+        center:new google.maps.LatLng(coords.lat,coords.lng),
+
+      });
+
+      //Creamos el marcador en el mapa con sus propiedades
+      //para nuestro obetivo tenemos que poner el atributo draggable en true
+      //position pondremos las mismas coordenas que obtuvimos en la geolocalización
+      marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        
+        position: new google.maps.LatLng(coords.lat,coords.lng),
+
+      });
+      //agregamos un evento al marcador junto con la funcion callback al igual que el evento dragend que indica 
+      //cuando el usuario a soltado el marcador
+      
+      
+      marker.addListener( 'dragend', function (event)
+      {
+        const lat = this.getPosition().lat();
+        const lon = this.getPosition().lng();
+        prueba = {lat, lon}
+
+        
+        
+      });
+}
+function mandar_a_python(){
+    const s = JSON.stringify(prueba);
+        $.ajax({
+            url:"/maps_destino_conductores",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)});
+}
+
+//callback al hacer clic en el marcador lo que hace es quitar y poner la animacion BOUNCE
+
+
+// Carga de la libreria de google maps 
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+    <a type="button" href="/salir_del_campus_carro" onclick="mandar_a_python()" >Primary</a>
+ 
