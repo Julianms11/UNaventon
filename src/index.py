@@ -1,4 +1,5 @@
 from tabnanny import check
+from turtle import distance
 from flask import Flask, redirect, render_template, request
 from flask_mysqldb import MySQL
 from flask_login import LoginManager, login_user, logout_user, login_required
@@ -88,10 +89,12 @@ def login():
 def test():
     output = request.get_json()
     result = json.loads(output)
-    x = str(result['lat'])
-    y = str(result['lon'])
+    lat = float(result['lat'])
+    lat = str(float("{:.6f}".format(lat)))
+    lon = float(result['lon'])
+    lon = str(float("{:.6f}".format(lon)))
     global coords_from_maps_carro
-    coords_from_maps_carro = {x, y}
+    coords_from_maps_carro = {lat, lon}
     print(coords_from_maps_carro)
     return ''
 
@@ -131,9 +134,14 @@ def verifica_codigo():
 def intento():
     output = request.get_json()
     result = json.loads(output)
-
-    lat = str(result["lat"])
-    lon = str(result["lon"])
+    if float(result["lat"]) > float(result["lon"]):
+        lat = str(result["lat"])
+        lon = str(result["lon"])
+    else:
+        lat = str(result["lon"])
+        lon = str(result["lat"])
+    
+    
     global cords
     cords = {lat, lon}
     return ''
@@ -172,11 +180,12 @@ def ir_al_campus():
     for i in range(0, len(data)):
         x = data[i][0]
         x = x.split(',')
-        check_cords = (float(x[0]), float(x[1]))
-        if calcular_distancia(user_current_position, check_cords) <= 1500:
-            rutas_cercanas.append(data[i])
-            distancia.append(calcular_distancia(user_current_position, check_cords))
-    return render_template('ir_al_campus.html', registros=rutas_cercanas, distancia=distancia)
+        lat = float(x[0])
+        lat = float("{:.6f}".format(lat))
+        lon = float(x[1])
+        lon = float("{:.6f}".format(lon))
+        rutas_cercanas.append(data[i])
+    return render_template('ir_al_campus.html', registros=rutas_cercanas)
 
 
 @app.route('/salir_del_campus')
@@ -186,12 +195,16 @@ def salir_del_campus():
     data = cur.fetchall()
     print(data)
     rutas_cercanas = []
+    distancia = []
     for i in range(0, len(data)):
         x = data[i][0]
         x = x.split(',')
-        check_coords = (float(x[0]), float(x[1]))
-        if calcular_distancia(coords_from_maps, check_coords) <= 1500:
-            rutas_cercanas.append(data[i])
+        lat = float(x[0])
+        lat = float("{:.6f}".format(lat))
+        lon = float(x[1])
+        lon = float("{:.6f}".format(lon))
+
+        rutas_cercanas.append(data[i])
     return render_template('salir_del_campus.html', registros=rutas_cercanas)
 
 @app.route('/ir_al_campus_carro', methods=['GET', 'POST'])
